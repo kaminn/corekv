@@ -30,8 +30,8 @@ func TestSkipList_compare(t *testing.T) {
 	byte2 := []byte("2")
 	entry1 := codec.NewEntry(byte1, byte1)
 
-	byte1score := list.calcScore(byte1)
-	byte2score := list.calcScore(byte2)
+	byte1score := calcScore(byte1)
+	byte2score := calcScore(byte2)
 
 	elem := &Element{
 		levels: nil,
@@ -61,6 +61,9 @@ func TestSkipListBasicCRUD(t *testing.T) {
 	entry2_new := codec.NewEntry([]byte("Key1"), []byte("Val1+1"))
 	assert.Nil(t, list.Add(entry2_new))
 	assert.Equal(t, entry2_new.Value, list.Search(entry2_new.Key).Value)
+
+	list.Print()
+	assert.Equal(t, int64(2), list.Size())
 }
 
 func Benchmark_SkipListBasicCRUD(b *testing.B) {
@@ -109,6 +112,10 @@ func TestConcurrentBasic(t *testing.T) {
 		}(i)
 	}
 	wg.Wait()
+
+	l.Print()
+	// Check size
+	assert.Equal(t, int64(n), l.Size())
 }
 
 func Benchmark_ConcurrentBasic(b *testing.B) {
